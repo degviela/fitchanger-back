@@ -23,7 +23,7 @@ Route::put('/clothingitems/{id}', [ClothingItemController::class, 'update']);
 Route::delete('/clothingitems/{id}', [ClothingItemController::class, 'destroy']);
 
 
-// Outfit routes
+// Outfit routessss
 Route::post('/outfits', [OutfitController::class, 'store']);
 
 Route::get('/outfits', [OutfitController::class, 'index']);
