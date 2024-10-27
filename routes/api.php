@@ -12,7 +12,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 // ClothingItem routes
-Route::post('/clothing-items', [ClothingItemController::class, 'store']);
+Route::post('/clothingitems', [ClothingItemController::class, 'store']);
 
 Route::get('/clothingitems', [ClothingItemController::class, 'index']);
 

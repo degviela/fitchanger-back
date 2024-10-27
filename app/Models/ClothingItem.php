@@ -10,10 +10,15 @@ class ClothingItem extends Model
     use HasFactory;
 
     protected $table = 'clothing_items';
-    protected $fillable = ['type', 'name', 'image_path'];
+
+    protected $fillable = [
+        'type',
+        'name',
+        'image_path',
+    ];
 
     public function outfits()
     {
-        return $this->belongsToMany(Outfit::class, 'clothingitem_outfit');
+        return $this->belongsToMany(Outfit::class);
     }
 }

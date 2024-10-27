@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClothingItem;
-use App\Models\Outfit;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ClothingItemController extends Controller
@@ -28,22 +26,63 @@ class ClothingItemController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        // Store the image
-        $imagePath = $request->file('image')->store('clothing_items', 'public');
+        try {
+            // Store the image
+            $imagePath = $request->file('image')->store('clothing_items', 'public');
 
-        // Create the clothing item
-        $clothingItem = ClothingItem::create([
-            'type' => $request->type,
-            'name' => $request->name,
-            'image_path' => $imagePath,
+            // Create the clothing item
+            $clothingItem = ClothingItem::create([
+                'type' => $request->type,
+                'name' => $request->name,
+                'image_path' => $imagePath,
+            ]);
+
+            // Attach the clothing item to the outfits
+            $clothingItem->outfits()->attach($request->outfit_ids);
+
+            return response()->json([
+                'message' => 'Clothing item created successfully!',
+                'clothingItem' => $clothingItem
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Server error'], 500);
+        }
+    }
+
+    /**
+     * Update the specified clothing item in storage.
+     */
+    public function update(Request $request, $id)
+    {
+        // Validate the request data
+        $validatedData = $request->validate([
+            'type' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'image' => 'nullable|image',
         ]);
 
-        // Attach the clothing item to the outfits
-        $clothingItem->outfits()->attach($request->outfit_ids);
+        try {
+            $clothingItem = ClothingItem::findOrFail($id);
+            $clothingItem->update($validatedData);
 
-        return response()->json([
-            'message' => 'Clothing item created successfully!',
-            'clothingItem' => $clothingItem
-        ], 201);
+            return response()->json($clothingItem, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Server error'], 500);
+        }
+    }
+
+    /**
+     * Remove the specified clothing item from storage.
+     */
+    public function destroy($id)
+    {
+        try {
+            $clothingItem = ClothingItem::findOrFail($id);
+            $clothingItem->delete();
+
+            return response()->json(null, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Server error'], 500);
+        }
     }
 }

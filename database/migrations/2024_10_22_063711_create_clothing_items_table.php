@@ -10,10 +10,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clothingitem_outfit', function (Blueprint $table) {
+        Schema::create('clothing_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('clothingitem_id')->constrained()->onDelete('cascade');
-            $table->foreignId('outfit_id')->constrained()->onDelete('cascade');
+            $table->enum('type', ['head', 'top', 'bottom', 'footwear']);
+            $table->string('name');
+            $table->string('image_path');
             $table->timestamps();
         });
     }
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clothingitem_outfit');
+        Schema::dropIfExists('clothingitems');
     }
 };

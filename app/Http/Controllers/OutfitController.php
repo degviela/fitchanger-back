@@ -2,29 +2,60 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Outfit;
-use App\Models\ClothingItem;
+use Illuminate\Http\Request;
 
 class OutfitController extends Controller
 {
     public function store(Request $request)
     {
+        // Validate the request data
         $validatedData = $request->validate([
             'user_id' => 'required|exists:users,id',
             'name' => 'required|string|max:255',
-            'clothing_item_ids' => 'required|array',
-            'clothing_item_ids.*' => 'exists:clothing_items,id',
+            'head_id' => 'required|exists:clothing_items,id',
+            'top_id' => 'required|exists:clothing_items,id',
+            'bottom_id' => 'required|exists:clothing_items,id',
+            'footwear_id' => 'required|exists:clothing_items,id',
         ]);
 
-        $outfit = Outfit::create([
-            'user_id' => $validatedData['user_id'],
-            'name' => $validatedData['name'],
+        try {
+            $outfit = Outfit::create($validatedData);
+            return response()->json($outfit, 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Server error'], 500);
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Validate the request data
+        $validatedData = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'name' => 'required|string|max:255',
+            'head_id' => 'required|exists:clothing_items,id',
+            'top_id' => 'required|exists:clothing_items,id',
+            'bottom_id' => 'required|exists:clothing_items,id',
+            'footwear_id' => 'required|exists:clothing_items,id',
         ]);
 
-        $clothingItems = ClothingItem::whereIn('id', $validatedData['clothing_item_ids'])->get();
-        $outfit->clothingItems()->attach($clothingItems);
+        try {
+            $outfit = Outfit::findOrFail($id);
+            $outfit->update($validatedData);
+            return response()->json($outfit, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Server error'], 500);
+        }
+    }
 
-        return response()->json($outfit->load('clothingItems'), 201);
+    public function destroy($id)
+    {
+        try {
+            $outfit = Outfit::findOrFail($id);
+            $outfit->delete();
+            return response()->json(null, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Server error'], 500);
+        }
     }
 }
