@@ -9,6 +9,7 @@ class ClothingItem extends Model
 {
     use HasFactory;
 
+    protected $table = 'clothing_items';
     protected $fillable = ['type', 'name', 'image_path'];
 
     public function outfits()

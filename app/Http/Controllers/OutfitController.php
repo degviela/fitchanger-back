@@ -2,36 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Outfit;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Outfit;
+use App\Models\ClothingItem;
 
 class OutfitController extends Controller
 {
-    /**
-     * Store a newly created outfit in storage.
-     */
     public function store(Request $request)
     {
-        // Validate the request data
-        $validator = Validator::make($request->all(), [
+        $validatedData = $request->validate([
             'user_id' => 'required|exists:users,id',
             'name' => 'required|string|max:255',
+            'clothing_item_ids' => 'required|array',
+            'clothing_item_ids.*' => 'exists:clothing_items,id',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
-        // Create the outfit
         $outfit = Outfit::create([
-            'user_id' => $request->user_id,
-            'name' => $request->name,
+            'user_id' => $validatedData['user_id'],
+            'name' => $validatedData['name'],
         ]);
 
-        return response()->json([
-            'message' => 'Outfit created successfully!',
-            'outfit' => $outfit
-        ], 201);
+        $clothingItems = ClothingItem::whereIn('id', $validatedData['clothing_item_ids'])->get();
+        $outfit->clothingItems()->attach($clothingItems);
+
+        return response()->json($outfit->load('clothingItems'), 201);
     }
 }
