@@ -14,7 +14,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 // ClothingItem routes
 Route::post('/clothingitems', [ClothingItemController::class, 'store']);
 
-Route::get('/clothingitems', [ClothingItemController::class, 'index']);
+Route::get('/clothing-items', [ClothingItemController::class, 'index']);
 
 Route::get('/clothingitems/{id}', [ClothingItemController::class, 'show']);
 

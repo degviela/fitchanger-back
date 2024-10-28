@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\Validator;
 class ClothingItemController extends Controller
 {
     /**
+     * Fetch all clothing items.
+     */
+    public function index()
+    {
+        $clothingItems = ClothingItem::all();
+        return response()->json($clothingItems);
+    }
+
+    /**
      * Validate the request data for posting a clothing item.
      */
     public function validateClothingItem(Request $request)
