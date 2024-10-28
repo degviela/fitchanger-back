@@ -12,13 +12,19 @@ return new class extends Migration
     {
         Schema::create('outfits', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->foreignId('head_id')->nullable()->constrained('clothing_items')->onDelete('set null');
-            $table->foreignId('top_id')->nullable()->constrained('clothing_items')->onDelete('set null');
-            $table->foreignId('bottom_id')->nullable()->constrained('clothing_items')->onDelete('set null');
-            $table->foreignId('footwear_id')->nullable()->constrained('clothing_items')->onDelete('set null');
+            $table->UnsignedBigInteger('user_id');
+            $table->UnsignedBigInteger('head_id');
+            $table->UnsignedBigInteger('top_id');
+            $table->UnsignedBigInteger('bottom_id');
+            $table->UnsignedBigInteger('footwear_id');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('head_id')->references('id')->on('clothing_items')->onDelete('cascade');
+            $table->foreign('top_id')->references('id')->on('clothing_items')->onDelete('cascade');
+            $table->foreign('bottom_id')->references('id')->on('clothing_items')->onDelete('cascade');
+            $table->foreign('footwear_id')->references('id')->on('clothing_items')->onDelete('cascade');
         });
     }
 
