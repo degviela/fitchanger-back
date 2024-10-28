@@ -9,6 +9,28 @@ use Illuminate\Support\Facades\Validator;
 class ClothingItemController extends Controller
 {
     /**
+     * Validate the request data for posting a clothing item.
+     */
+    public function validateClothingItem(Request $request)
+    {
+        // Define validation rules
+        $rules = [
+            'type' => 'required|in:head,top,bottom,footwear',
+            'name' => 'required|string|max:255',
+            'image' => 'required|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ];
+
+        // Validate the request data
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        return response()->json(['message' => 'Validation successful'], 200);
+    }
+
+    /**
      * Store a newly created clothing item in storage.
      */
     public function store(Request $request)
@@ -18,8 +40,6 @@ class ClothingItemController extends Controller
             'type' => 'required|in:head,top,bottom,footwear',
             'name' => 'required|string|max:255',
             'image' => 'required|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'outfit_ids' => 'required|array',
-            'outfit_ids.*' => 'exists:outfits,id',
         ]);
 
         if ($validator->fails()) {
@@ -36,9 +56,6 @@ class ClothingItemController extends Controller
                 'name' => $request->name,
                 'image_path' => $imagePath,
             ]);
-
-            // Attach the clothing item to the outfits
-            $clothingItem->outfits()->attach($request->outfit_ids);
 
             return response()->json([
                 'message' => 'Clothing item created successfully!',

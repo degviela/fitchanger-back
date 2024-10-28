@@ -34,4 +34,8 @@ Route::put('/outfits/{id}', [OutfitController::class, 'update']);
 
 Route::delete('/outfits/{id}', [OutfitController::class, 'destroy']);
 
+        Route::post('clothing-items/validate', [ClothingItemController::class, 'validateClothingItem']);
+
+        Route::post('clothing-items', [ClothingItemController::class, 'store']);
+
 })->middleware('auth:sanctum');
