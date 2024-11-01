@@ -16,7 +16,7 @@ Route::post('/clothingitems', [ClothingItemController::class, 'store']);
 
 Route::get('/clothingitems', [ClothingItemController::class, 'index']);
 
-Route::get('/clothingitems/{id}', [ClothingItemController::class, 'show']);
+Route::get('/clothingitems/{id}', [ClothingItemController::class, 'getClothingItemById']);
 
 Route::put('/clothingitems/{id}', [ClothingItemController::class, 'update']);
 

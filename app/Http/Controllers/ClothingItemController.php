@@ -111,4 +111,14 @@ class ClothingItemController extends Controller
             return response()->json(['error' => 'Server error'], 500);
         }
     }
+    public function getClothingItemById($id)
+    {
+        $clothingItem = ClothingItem::find($id);
+
+        if (!$clothingItem) {
+            return response()->json(['error' => 'Clothing item not found'], 404);
+        }
+
+        return response()->json($clothingItem);
+    }
 }
