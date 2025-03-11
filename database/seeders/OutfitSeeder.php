@@ -22,14 +22,14 @@ class OutfitSeeder extends Seeder
             ['user_id' => 1, 'name' => 'bhjbvjvhj', 'head_id' => 1, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 5],
             ['user_id' => 1, 'name' => 'sigma', 'head_id' => 2, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 6],
             ['user_id' => 1, 'name' => 'adawddaaw', 'head_id' => 1, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 5],
-            ['user_id' => 2, 'name' => 'adawdda', 'head_id' => 1, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 5],
-            ['user_id' => 2, 'name' => 'Sigma skibi', 'head_id' => 1, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 5],
-            ['user_id' => 3, 'name' => 'Pink guy', 'head_id' => 1, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 5],
+            ['user_id' => 1, 'name' => 'adawdda', 'head_id' => 1, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 5],
+            ['user_id' => 1, 'name' => 'Sigma skibi', 'head_id' => 1, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 5],
+            ['user_id' => 1, 'name' => 'Pink guy', 'head_id' => 1, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 5],
             ['user_id' => 1, 'name' => 'swqwswqs', 'head_id' => 1, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 5],
-            ['user_id' => 2, 'name' => 'wadadwa', 'head_id' => 1, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 5],
-            ['user_id' => 2, 'name' => 'Pinknibab', 'head_id' => 1, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 5],
-            ['user_id' => 2, 'name' => 'Siiiigma', 'head_id' => 1, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 5],
-            ['user_id' => 4, 'name' => 'kinda gay', 'head_id' => 1, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 5],
+            ['user_id' => 1, 'name' => 'wadadwa', 'head_id' => 1, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 5],
+            ['user_id' => 1, 'name' => 'Pinknibab', 'head_id' => 1, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 5],
+            ['user_id' => 1, 'name' => 'Siiiigma', 'head_id' => 1, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 5],
+            ['user_id' => 1, 'name' => 'kinda gay', 'head_id' => 1, 'top_id' => 4, 'bottom_id' => 3, 'footwear_id' => 5],
         ];
 
         foreach ($outfits as $outfit) {
