@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClothingItemController;
 use App\Http\Controllers\OutfitController;
 
-Route::prefix('authenticated')->group(function(){
+//Route::prefix('authenticated')->group(function(){
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
@@ -38,4 +38,4 @@ Route::delete('/outfits/{id}', [OutfitController::class, 'destroy']);
 
         Route::post('clothing-items', [ClothingItemController::class, 'store']);
 
-})->middleware('auth:sanctum');
+//})->middleware('auth:sanctum');
