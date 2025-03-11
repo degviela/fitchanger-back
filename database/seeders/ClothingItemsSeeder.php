@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ClothingItemsSeeder extends Seeder
 {
@@ -23,7 +24,13 @@ class ClothingItemsSeeder extends Seeder
         ];
 
         foreach ($clothingItems as $item) {
-            DB::table('clothing_items')->insert($item);
+            DB::table('clothing_items')->insert([
+                'type' => $item['type'],
+                'name' => $item['name'],
+                'image_path' => $item['image_path'],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
         }
     }
 }
