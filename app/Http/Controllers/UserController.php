@@ -79,6 +79,29 @@ class UserController extends Controller
         );
     }
 
+    public function update(Request $request)
+    {
+        $user = $request->user(); // Get authenticated user
+
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+            'firstName' => 'nullable|string|max:255',
+            'lastName' => 'nullable|string|max:255',
+            // add more fields if needed
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $user->update($request->only(['username', 'firstName', 'lastName']));
+
+        return response()->json([
+            'message' => 'Profile updated successfully.',
+            'user' => $user,
+        ]);
+    }
+
 
     public function logout(Request $request)
     {
@@ -90,6 +113,23 @@ class UserController extends Controller
             'message' => 'Logged out successfully.'
         ])->withCookie(cookie()->forget('auth_token')); // Forget the auth_token cookie
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $users = User::where('username', 'like', '%' . $query . '%')->get();
+
+        return response()->json($users);
+    }
+
+    public function show($id)
+    {
+        $user = User::with(['outfits.head', 'outfits.top', 'outfits.bottom', 'outfits.footwear'])
+            ->findOrFail($id);
+
+        return response()->json($user);
+    }
+
 
 
 }

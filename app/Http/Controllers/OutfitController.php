@@ -150,4 +150,5 @@ class OutfitController extends Controller
             return response()->json(['error' => 'Server error'], 500);
         }
     }
+
 }
