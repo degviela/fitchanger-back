@@ -14,5 +14,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->put('/profile/update', [UserController::class, 'update'])->name('profile.update');
 
-
 require __DIR__.'/auth.php';
