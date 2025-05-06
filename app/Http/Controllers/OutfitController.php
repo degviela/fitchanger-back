@@ -8,30 +8,24 @@ use Illuminate\Http\Request;
 
 class OutfitController extends Controller
 {
-    /**
-     * Fetch all outfits.
-     */
+    // funkcija index, kas iegūst visus outfitus
     public function index()
     {
         $outfits = Outfit::all();
         return response()->json($outfits);
     }
 
-    /**
-     * Fetch outfits by user ID.
-     */
+    //funkcija, kas iegūst outfitus pēc lietotāja ID
     public function getByUserId($userId)
     {
         $outfits = Outfit::where('user_id', $userId)->get();
         return response()->json($outfits);
     }
 
-    /**
-     * Store a newly created outfit in storage.
-     */
+    // funkcija, kas ļauj izveidoy jaunu outfitu ieliekot ievades datu datubāzē
     public function store(Request $request)
     {
-        // Validate the request data
+        //aizmugursistēmas validācijas, lai lietotājs neieliktu nepareizus datus
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'user_id' => 'required|exists:users,id',
@@ -40,6 +34,9 @@ class OutfitController extends Controller
             'clothing_items.*.id' => 'required|exists:clothing_items,id',
         ]);
 
+        //ja atbilst validācijas noteikumiem,
+        // turpinās apģērbu kombināciju izpilde
+
         try {
             $clothingItemIds = [
                 'head_id' => null,
@@ -47,7 +44,7 @@ class OutfitController extends Controller
                 'bottom_id' => null,
                 'footwear_id' => null,
             ];
-
+            //iziet cauri visiem apģērbu veidiem un piešķirt to ID atbilstošajiem tipiem
             foreach ($request->clothing_items as $item) {
                 switch ($item['type']) {
                     case 'head':
@@ -66,33 +63,35 @@ class OutfitController extends Controller
             }
 
             $validatedData = array_merge($validatedData, $clothingItemIds);
-
+            //izveido jaunu outfitu ar validētiem datiem
             $outfit = Outfit::create($validatedData);
+            //izvada outfit
             return response()->json($outfit, 201);
         } catch (\Exception $e) {
+            //ja notiek kļūda, atgriež kļūdas ziņojumu
             return response()->json(['error' => 'Server error'], 500);
         }
     }
 
-    /**
-     * Display the specified outfit.
-     */
+    //parāda specifisku outfitu
     public function show($id)
     {
-        try {
-            $outfit = Outfit::findOrFail($id);
-            return response()->json($outfit);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Outfit not found'], 404);
+        //meklē outfit pēc ID
+        $outfit = Outfit::find($id);
+        //ja outfit nav atrasts, atgriež kļūdas ziņojumu
+        if (!$outfit) {
+            return response()->json(['message' => 'Outfit not found'], 404);
         }
+        //ja outfit ir atrasts, atgriež outfit ar nosacīto ID
+        return response()->json($outfit);
     }
 
-    /**
-     * Update the specified outfit in storage.
-     */
+
+
+    //funkcija, kas atjauno outfit datus
     public function update(Request $request, $id)
     {
-        // Validate the request data
+        // validē izmaiņas
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'user_id' => 'required|exists:users,id',
@@ -102,15 +101,16 @@ class OutfitController extends Controller
         ]);
 
         try {
+            //meklē outfit pēc ID
             $outfit = Outfit::findOrFail($id);
-
+            //iestata visus drēbju ID no jauna
             $clothingItemIds = [
                 'head_id' => null,
                 'top_id' => null,
                 'bottom_id' => null,
                 'footwear_id' => null,
             ];
-
+            //iziet cauri visiem apģērbu veidiem un piešķirt to ID atbilstošajiem tipiem
             foreach ($request->clothing_items as $item) {
                 switch ($item['type']) {
                     case 'head':
@@ -127,26 +127,30 @@ class OutfitController extends Controller
                         break;
                 }
             }
-
+            //apvieno validētos datus ar drēbju ID
             $validatedData = array_merge($validatedData, $clothingItemIds);
-
+            //atjauno outfit ar validētiem datiem
             $outfit->update($validatedData);
             return response()->json($outfit, 200);
         } catch (\Exception $e) {
+            //ja notiek kļūda, atgriež kļūdas ziņojumu
             return response()->json(['error' => 'Server error'], 500);
         }
     }
 
-    /**
-     * Remove the specified outfit from storage.
-     */
+
+    //funkcija, kas dzēš outfit datus no datubāzes
     public function destroy($id)
     {
+
         try {
+            //meklē outfit pēc ID
             $outfit = Outfit::findOrFail($id);
+            //Ja atrod outfit, tad to dzēš
             $outfit->delete();
             return response()->json(null, 200);
         } catch (\Exception $e) {
+            //ja notiek kļūda, atgriež kļūdas ziņojumu
             return response()->json(['error' => 'Server error'], 500);
         }
     }

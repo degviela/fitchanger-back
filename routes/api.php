@@ -60,6 +60,8 @@ Route::post('/outfits', [OutfitController::class, 'store']);
 
 Route::get('/outfits', [OutfitController::class, 'index']);
 
+Route::get('/outfits/{id}', [OutfitController::class, 'show']);
+
 Route::get('/outfits/user/{userId}', [OutfitController::class, 'getByUserId']);
 
 Route::put('/outfits/{id}', [OutfitController::class, 'update']);
