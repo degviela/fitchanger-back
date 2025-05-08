@@ -102,6 +102,49 @@ class UserController extends Controller
         ]);
     }
 
+    public function updatePicture(Request $request)
+    {
+        \Log::info($request->all());
+        // Get the authenticated user
+        $user = $request->user();
+
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'profile_picture' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+        ]);
+
+        // If validation fails, return errors
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        // Check if the request contains the profile picture
+        if ($request->hasFile('profile_picture')) {
+            $image = $request->file('profile_picture');
+
+            // Store the image in the 'profile_pictures' directory within 'public'
+            $imagePath = $image->store('profile_pictures', 'public');
+
+            // Optionally delete the old profile picture if it exists
+            if ($user->profile_picture) {
+                // Ensure the old file is removed from storage
+                \Storage::disk('public')->delete($user->profile_picture);
+            }
+
+            // Update the user's profile picture field in the database
+            $user->profile_picture = $imagePath;
+            $user->save();
+        }
+
+        // Return a success response
+        return response()->json([
+            'message' => 'Profile picture updated successfully.',
+            'user' => $user,
+        ]);
+    }
+
+
+
 
     public function logout(Request $request)
     {

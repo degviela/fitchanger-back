@@ -13,5 +13,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->put('/profile/update', [UserController::class, 'update'])->name('profile.update');
+Route::middleware('auth:sanctum')->post('/profile/update-picture', [UserController::class, 'updatePicture'])->name('profile.update.picture');
 
 require __DIR__.'/auth.php';
